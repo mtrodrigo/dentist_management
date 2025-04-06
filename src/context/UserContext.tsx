@@ -4,6 +4,7 @@ import useAuth from "../hooks/useAuth";
 interface UserContextProps {
     authenticated: boolean;
     login: (user: { email: string; password: string }) => Promise<void>;
+    logout: () => Promise<void>;
 }
 export interface ChildrenProps {
     children: React.ReactNode;
@@ -13,10 +14,10 @@ export interface ChildrenProps {
 const Context = createContext({} as UserContextProps)
 
 const UserProvider: React.FC<ChildrenProps> = ({ children }: ChildrenProps) => {
-    const { authenticated, login } = useAuth() as UserContextProps;
+    const { authenticated, login, logout } = useAuth() as UserContextProps;
 
     return (
-        <Context.Provider value={{ authenticated, login }}>
+        <Context.Provider value={{ authenticated, login, logout }}>
             {children}
         </Context.Provider>
     );

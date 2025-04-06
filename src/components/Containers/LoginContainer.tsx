@@ -4,7 +4,6 @@ import { ChildrenProps } from "../../context/UserContext";
 export function LoginContainer({ children }: ChildrenProps) {
   return (
     <Box
-      component="form"
       sx={{
         display: "flex",
         flexDirection: "column",
@@ -12,7 +11,7 @@ export function LoginContainer({ children }: ChildrenProps) {
         alignItems: "center",
         justifyContent: "center",
         p: 2,
-        border: "1px solid #424242",
+        border: "1px solid #BDBDBD",
         borderRadius: 2,
         boxShadow: 3,
         maxWidth: 500,

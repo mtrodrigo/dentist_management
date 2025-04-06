@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
-import api from '../utils/api'
+import api from "../utils/api";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 
 interface AuthUserProps {
-    email: string,
-    password: string,
-    token?: string
+  email: string;
+  password: string;
+  token?: string;
 }
 
 export default function useAuth() {
@@ -22,7 +22,7 @@ export default function useAuth() {
       setAuthenticated(true);
     }
   }, []);
-  const authUser = async (data: AuthUserProps)  => {
+  const authUser = async (data: AuthUserProps) => {
     setAuthenticated(true);
 
     localStorage.setItem(
@@ -35,19 +35,39 @@ export default function useAuth() {
     let msgText = "Login realizado com sucesso";
 
     try {
+      console.log(user);
+      
       const data = await api.post("/users/login", user).then((response) => {
         return response.data;
       });
       await authUser(data);
-      navigate('/')
+      toast.success(msgText);
+      navigate("/");
     } catch (error) {
-      if (error instanceof Error && (error as any).response?.data) {
-        msgText = (error as any).response.data;
+      if (
+        error instanceof Error &&
+        "response" in error &&
+        (error as any).response.data &&
+        (error as any).response.data.message
+      ) {
+        msgText = (error as any).response.data.message;
+        toast.error(msgText);
+      } else {
+        msgText = "Erro ao realizar login";
+        toast.error(msgText);
+        console.error("Error:", error);
       }
-      toast.error(msgText);
     }
-
+  }
+  const logout = () => {
+    const msgText = "Logout realizado com sucesso";
+    
+    setAuthenticated(false);
+    localStorage.removeItem("@dentist-management-token");
+    delete api.defaults.headers.Authorization;
+    
     toast.success(msgText);
+    navigate("/login");
   };
-  return { authenticated, login }
+  return { authenticated, login, logout };
 }

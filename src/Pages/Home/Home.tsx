@@ -16,23 +16,43 @@ interface Data {
 
 const rows = [
   {
-    name: "Rodrigo Marques Tavares",
-    cpf: "07540522658",
+    name: "Teste 1",
+    cpf: "11111111111",
     lastConsult: "25/02/2021",
   },
   {
-    name: "Marilia de Souza Dias",
-    cpf: "07997287647",
+    name: "Teste 2",
+    cpf: "22222222222",
     lastConsult: "25/02/2021",
   },
   {
-    name: "Rodrigo Marques Tavares",
-    cpf: "07540522658",
+    name: "Teste 3",
+    cpf: "33333333333",
     lastConsult: "25/02/2021",
   },
   {
-    name: "Marilia de Souza Dias",
-    cpf: "07997287647",
+    name: "Teste 4",
+    cpf: "44444444444",
+    lastConsult: "25/02/2021",
+  },
+  {
+    name: "Teste 5",
+    cpf: "55555555555",
+    lastConsult: "25/02/2021",
+  },
+  {
+    name: "Teste 6",
+    cpf: "66666666666",
+    lastConsult: "25/02/2021",
+  },
+  {
+    name: "Teste 7",
+    cpf: "77777777777",
+    lastConsult: "25/02/2021",
+  },
+  {
+    name: "Teste 8",
+    cpf: "88888888888",
     lastConsult: "25/02/2021",
   } as Data,
 ];

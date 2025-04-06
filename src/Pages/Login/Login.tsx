@@ -1,34 +1,30 @@
 import { InputLogin } from "../../components/Inputs/InputLogin";
 import { Button } from "@mui/material";
-import { useForm } from "react-hook-form";
 import { LoginContainer } from "../../components/Containers/LoginContainer";
 import Logo from '../../assets/logo.png'
 import { Context } from "../../context/UserContext";
-import { useContext } from "react";
-import {z} from 'zod'
-import { zodResolver } from '@hookform/resolvers/zod'
+import { useContext, useState } from "react";
 
-const schema = z.object({
-  email: z.string().email('E-mail inválido').nonempty('E-mail é obrigatório'),
-  password: z.string().nonempty('Senha é obrigatória'),
-})
+interface UserProps {
+  email: string;
+  password: string;
+}
 
 export const Login = () => {
-
-  const {register, handleSubmit, formState} = useForm({
-    resolver: zodResolver(schema),
+  const [user, setUser] = useState<UserProps>({
+    email: "",
+    password: "",
   });
   const { login } = useContext(Context);
 
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setUser({ ...user, [e.target.name]: e.target.value });
+  };
 
-  const handleLogin = (data) => {
-    data.preventDefault();
-    const user = {
-      email: data.email,
-      password: data.password,
-    };
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     login(user);
-  }
+  };
 
   return (
     <>
@@ -40,17 +36,21 @@ export const Login = () => {
       <LoginContainer>
         <h1 className="text-2xl text-center text-blue-500">Faça o login</h1>
         <form 
-          onSubmit={handleSubmit(handleLogin)} 
+          onSubmit={handleLogin} 
           className="flex flex-col gap-5"
         >
           <InputLogin 
             label="Usuário" 
             type="email" 
-            {...register('email')} />
+            name="email"
+            onChange={handleChange}
+          />
           <InputLogin 
             label="Senha" 
             type="password" 
-            {...register('password')} />
+            name="password"
+            onChange={handleChange}
+          />
           <Button
             sx={{ marginTop: 2 }}
             variant="outlined"
