@@ -2,10 +2,10 @@ import { TextField } from "@mui/material"
 
 interface InputLoginProps {
     label: string,
-    type: string
+    type: string,
 }
 
-export const InputLogin = ({label ,type}: InputLoginProps) => {
+export const InputLogin = ({label ,type }: InputLoginProps) => {
     return (
         <TextField
             hiddenLabel
@@ -13,6 +13,8 @@ export const InputLogin = ({label ,type}: InputLoginProps) => {
             label={label}
             fullWidth
             type={type}
+            name={name}
+            onChange={onChange}
             color="primary"
             variant="outlined"
             inputProps={{ style: { color: 'white' } }}
