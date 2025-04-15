@@ -25,7 +25,7 @@ export interface PatientProps {
 }
 
 export const Home = () => {
-  const [patients, setPatients] = useState<PatientProps | null>(null);
+  const [patients, setPatients] = useState<PatientProps[] | null>(null);
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
