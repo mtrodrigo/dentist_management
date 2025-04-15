@@ -4,8 +4,8 @@ export const ContainerMaster = ({ children }: { children: ReactNode }) => {
     return(
         <div className="
         bg-zinc-700
-        h-screen
-        w-screen
+        min-h-screen
+        max-w-screen
         flex
         flex-col
         justify-between

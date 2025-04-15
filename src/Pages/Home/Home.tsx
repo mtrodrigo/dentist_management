@@ -5,60 +5,51 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import PlusIcon from "@mui/icons-material/Add";
-import { Link } from "react-router-dom";
+import Button from "@mui/material/Button";
+import { useEffect, useState } from "react";
+import api from "../../utils/api";
+import CircularProgress from "@mui/material/CircularProgress";
 
-interface Data {
+export interface PatientProps {
+  _id: string;
   name: string;
+  email: string;
+  phone: string;
   cpf: string;
-  lastConsult: string;
+  birthDate: string;
+  address: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  medicalHistory: string;
 }
 
-const rows = [
-  {
-    name: "Teste 1",
-    cpf: "11111111111",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 2",
-    cpf: "22222222222",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 3",
-    cpf: "33333333333",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 4",
-    cpf: "44444444444",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 5",
-    cpf: "55555555555",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 6",
-    cpf: "66666666666",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 7",
-    cpf: "77777777777",
-    lastConsult: "25/02/2021",
-  },
-  {
-    name: "Teste 8",
-    cpf: "88888888888",
-    lastConsult: "25/02/2021",
-  } as Data,
-];
-
 export const Home = () => {
-  return (
+  const [patients, setPatients] = useState<PatientProps | null>(null);
+  const [token] = useState(
+    localStorage.getItem("@dentist-management-token") || ""
+  );
+
+  useEffect(() => {
+    api
+      .get("/patients/mypatients", {
+        headers: {
+          Authorization: `Bearer ${token ? JSON.parse(token) : ""}`,
+        },
+      })
+      .then((response) => {
+        setPatients(response.data.patients);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }, []);
+
+  return !patients ? (
+    <>
+      <CircularProgress size="3.5rem" />
+    </>
+  ) : (
     <main className="px-3">
       <TableContainer component={Paper}>
         <Table
@@ -70,25 +61,25 @@ export const Home = () => {
             <TableRow>
               <TableCell>Nome</TableCell>
               <TableCell align="center">CPF</TableCell>
-              <TableCell align="center">Ultima Consulta</TableCell>
+              <TableCell align="center">Cidade</TableCell>
               <TableCell align="center"></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row, id) => (
+            {patients.map((patient) => (
               <TableRow
-                key={id}
+                key={patient.cpf}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {patient.name}
                 </TableCell>
-                <TableCell align="right">{row.cpf}</TableCell>
-                <TableCell align="center">{row.lastConsult}</TableCell>
+                <TableCell align="right">{patient.cpf}</TableCell>
+                <TableCell align="center">{patient.city}</TableCell>
                 <TableCell align="center">
-                  <Link to="/details">
-                    <PlusIcon color="info" />
-                  </Link>
+                  <Button size="small" href={`/patient/${patient._id}`}>
+                    Detalhes
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

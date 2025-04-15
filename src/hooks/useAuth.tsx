@@ -35,14 +35,13 @@ export default function useAuth() {
     let msgText = "Login realizado com sucesso";
 
     try {
-      console.log(user);
       
       const data = await api.post("/users/login", user).then((response) => {
         return response.data;
       });
       await authUser(data);
       toast.success(msgText);
-      navigate("/");
+      navigate("/home");
     } catch (error) {
       if (
         error instanceof Error &&
@@ -67,7 +66,7 @@ export default function useAuth() {
     delete api.defaults.headers.Authorization;
     
     toast.success(msgText);
-    navigate("/login");
+    navigate("/");
   };
   return { authenticated, login, logout };
 }
