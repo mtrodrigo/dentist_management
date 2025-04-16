@@ -43,7 +43,7 @@ export const Home = () => {
       .catch((error) => {
         console.error(error);
       });
-  }, [patients]);
+  }, []);
 
   return !patients ? (
     <>

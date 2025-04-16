@@ -15,7 +15,11 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  const { login } = useContext(Context);
+  const { login, authenticated, logout } = useContext(Context);
+
+  if(authenticated){
+    logout()
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setUser({ ...user, [e.target.name]: e.target.value });

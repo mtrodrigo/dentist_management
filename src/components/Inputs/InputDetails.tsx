@@ -3,7 +3,7 @@ interface InputProps {
   text: string;
   value?: string;
   type: string;
-  onChange: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 export default function InputDetails({
