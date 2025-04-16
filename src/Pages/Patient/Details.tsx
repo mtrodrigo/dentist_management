@@ -31,7 +31,7 @@ export default function Details() {
       .catch((error) => {
         console.error(error);
       });
-  }, [id, token]);
+  }, [id]);
 
   return !patient ? (
     <>
