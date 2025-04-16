@@ -66,7 +66,7 @@ export default function useAuth() {
     delete api.defaults.headers.Authorization;
     
     toast.success(msgText);
-    navigate("/");
+    navigate('/login');
   };
   return { authenticated, login, logout };
 }
