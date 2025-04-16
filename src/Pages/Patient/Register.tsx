@@ -37,6 +37,10 @@ export default function Register() {
     }
   };
 
+  const handleGoHome = () => {
+    navigate('/home')
+  }
+
   return (
     <PatientContainer>
       <form
@@ -46,7 +50,7 @@ export default function Register() {
         <Button
           variant="outlined"
           startIcon={<KeyboardBackspaceOutlinedIcon />}
-          href="/home"
+          onClick={handleGoHome}
         >
           Voltar
         </Button>

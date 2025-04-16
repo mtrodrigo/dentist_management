@@ -54,6 +54,10 @@ export const Home = () => {
     navigate('/patient/register')
   }
 
+  const handleDetails = (id: string) => {
+    navigate(`/patient/${id}`)
+  }
+
   return isLoading ? (
     <>
       <CircularProgress size="3.5rem" />
@@ -91,7 +95,7 @@ export const Home = () => {
                 <TableCell align="right">{patient.cpf}</TableCell>
                 <TableCell align="center">{patient.city}</TableCell>
                 <TableCell align="center">
-                  <Button size="small" href={`/patient/${patient._id}`}>
+                  <Button size="small" onClick={() => handleDetails(patient._id) }>
                     Detalhes
                   </Button>
                 </TableCell>

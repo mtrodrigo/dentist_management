@@ -87,6 +87,10 @@ export default function Details() {
     }
   };
 
+  const handleGoHome = () => {
+    navigate('/home')
+  }
+
   return !patient ? (
     <>
       <CircularProgress size="3.5rem" />
@@ -100,7 +104,7 @@ export default function Details() {
         <Button
           variant="outlined"
           startIcon={<KeyboardBackspaceOutlinedIcon />}
-          href="/home"
+          onClick={handleGoHome}
         >
           Voltar
         </Button>

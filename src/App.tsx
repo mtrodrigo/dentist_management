@@ -20,27 +20,4 @@ function App() {
   );
 }
 export default App;
-// const router = createBrowserRouter([
-//   {
-//     element: <Layout />,
-//     children: [
-//       {
-//         path: "/home",
-//         element: <Home />,
-//       },
-//       {
-//         path: "/",
-//         element: <Login />,
-//       },
-//       {
-//         path: "/patient/:id",
-//         element: <Details />,
-//       },
-//       {
-//         path: "/patients/register",
-//         element: <Register />,
-//       },
-//     ],
-//   },
-// ]);
-// export { router };
+
