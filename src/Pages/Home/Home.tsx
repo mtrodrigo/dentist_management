@@ -9,6 +9,7 @@ import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import CircularProgress from "@mui/material/CircularProgress";
+import HowToRegIcon from '@mui/icons-material/HowToReg';
 
 export interface PatientProps {
   _id: string;
@@ -26,6 +27,7 @@ export interface PatientProps {
 
 export const Home = () => {
   const [patients, setPatients] = useState<PatientProps[] | null>(null);
+  const [isLoading, setIsLoadin] = useState<boolean>(true);
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
@@ -39,18 +41,24 @@ export const Home = () => {
       })
       .then((response) => {
         setPatients(response.data.patients);
+        setIsLoadin(false);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
 
-  return !patients ? (
+  return isLoading ? (
     <>
       <CircularProgress size="3.5rem" />
     </>
   ) : (
     <main className="px-3">
+      <div>
+        <Button variant="outlined" startIcon={<HowToRegIcon />} href="/patients/register">
+          Cadastrar
+        </Button>
+      </div>
       <TableContainer component={Paper}>
         <Table
           sx={{ maxWidth: 650, color: "transparent" }}
@@ -66,7 +74,7 @@ export const Home = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {patients.map((patient) => (
+            {patients?.map((patient) => (
               <TableRow
                 key={patient.cpf}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

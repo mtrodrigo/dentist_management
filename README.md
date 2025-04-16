@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# Dentist Management
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Resumo
+O **Dentist Management** é uma aplicação desenvolvida para facilitar a gestão de consultórios odontológicos. Com ela, é possível gerenciar agendamentos, pacientes, prontuários e outras funcionalidades essenciais para o dia a dia de um consultório.
 
-Currently, two official plugins are available:
+## Tecnologias Utilizadas
+- **Frontend**: Desenvolvido com React para criar uma interface de usuário moderna e responsiva.
+- **Banco de Dados**: MongoDB para armazenamento de dados não-relacionais.
+- **Autenticação**: Implementada com JWT (JSON Web Tokens) para segurança.
+- **Estilização**: Tailwind CSS para um design limpo e eficiente.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Instalação
+Siga os passos abaixo para configurar e executar o frontend do projeto localmente:
 
-## Expanding the ESLint configuration
+1. **Clone o repositório**:
+  ```bash
+  git clone https://github.com/seu-usuario/dentist-management.git
+  cd dentist-management
+  ```
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+2. **Instale as dependências**:
+  ```bash
+  npm install
+  ```
 
-- Configure the top-level `parserOptions` property like this:
+3. **Configuração do Backend**:
+  - Certifique-se de que o backend está configurado e em execução. Você pode encontrar o repositório do backend [aqui](https://github.com/mtrodrigo/dentist_management_api.git).
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+4. **Execute o projeto**:
+  ```bash
+  npm start
+  ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+  ## Contato
+  Se tiver dúvidas ou sugestões, entre em contato:
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+  - **Email**: rodrigour@gmail.com  
+  - **LinkedIn**: [LinkedIn](https://www.linkedin.com/in/rodrigo)  
+  - **GitHub**: [GitHub](https://github.com/mtrodrigo)

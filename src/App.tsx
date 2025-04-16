@@ -5,7 +5,6 @@ import Register from "./Pages/Patient/Register";
 import { Layout } from "./components/Layout/Layout";
 import { createBrowserRouter } from "react-router-dom";
 
-
 const router = createBrowserRouter([
   {
     element: <Layout />,
@@ -20,12 +19,12 @@ const router = createBrowserRouter([
       },
       {
         path: "/patient/:id",
-        element: <Details />
+        element: <Details />,
       },
       {
         path: "/patients/register",
-        element: <Register />
-      }
+        element: <Register />,
+      },
     ],
   },
 ]);

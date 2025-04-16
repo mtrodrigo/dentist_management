@@ -12,6 +12,7 @@ export default function InputDetails({
   value,
   type,
   onChange,
+  ...props
 }: InputProps) {
   return (
     <div className="flex flex-col gap-0.5 w-10/10">
@@ -24,6 +25,7 @@ export default function InputDetails({
         value={value}
         name={name}
         onChange={onChange}
+        {...props}
       />
     </div>
   );

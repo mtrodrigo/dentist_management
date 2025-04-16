@@ -17,8 +17,8 @@ export const Login = () => {
   });
   const { login, authenticated, logout } = useContext(Context);
 
-  if(authenticated){
-    logout()
+  if (authenticated) {
+    logout();
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

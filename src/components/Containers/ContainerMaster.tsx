@@ -1,8 +1,9 @@
-import { ReactNode } from "react"
+import { ReactNode } from "react";
 
 export const ContainerMaster = ({ children }: { children: ReactNode }) => {
-    return(
-        <div className="
+  return (
+    <div
+      className="
         bg-zinc-700
         min-h-screen
         max-w-screen
@@ -10,8 +11,8 @@ export const ContainerMaster = ({ children }: { children: ReactNode }) => {
         flex-col
         justify-between
         items-center"
-        >
-            {children}
-        </div>
-    )
-}
+    >
+      {children}
+    </div>
+  );
+};
