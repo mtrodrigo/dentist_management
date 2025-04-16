@@ -14,7 +14,7 @@ export const Header = () => {
         <img className="min-w-full" src="/favicon.ico" alt="Logo" />
       </Link>
       <nav className="flex gap-4 text-zinc-200">
-        <Link className="hover:text-blue-400" to="/patients/register">
+        <Link className="hover:text-blue-400" to="/patient/register">
           Cadastrar
         </Link>
         <Link className="hover:text-blue-400" to="/home">
