@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import CircularProgress from "@mui/material/CircularProgress";
 import HowToRegIcon from '@mui/icons-material/HowToReg';
+import { useNavigate } from "react-router-dom";
 
 export interface PatientProps {
   _id: string;
@@ -31,6 +32,7 @@ export const Home = () => {
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
+  const navigate = useNavigate()
 
   useEffect(() => {
     api
@@ -48,6 +50,10 @@ export const Home = () => {
       });
   }, []);
 
+  const handleRegister = () => {
+    navigate('/patient/register')
+  }
+
   return isLoading ? (
     <>
       <CircularProgress size="3.5rem" />
@@ -55,7 +61,7 @@ export const Home = () => {
   ) : (
     <main className="px-3">
       <div>
-        <Button variant="outlined" startIcon={<HowToRegIcon />} href="/patients/register">
+        <Button variant="outlined" startIcon={<HowToRegIcon />} onClick={handleRegister}>
           Cadastrar
         </Button>
       </div>
