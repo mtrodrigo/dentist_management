@@ -61,12 +61,13 @@ export default function useAuth() {
   const logout = () => {
     const msgText = "Logout realizado com sucesso";
     
-    setAuthenticated(false);
     localStorage.removeItem("@dentist-management-token");
     delete api.defaults.headers.Authorization;
     
+    setAuthenticated(false);
+    
     toast.success(msgText);
-    navigate('/login');
+    navigate('/', {replace: true})
   };
   return { authenticated, login, logout };
 }

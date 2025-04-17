@@ -2,17 +2,28 @@ import { Header } from "../Header/Header";
 import { Footer } from "../Footer/Footer";
 import { ContainerMaster } from "../Containers/ContainerMaster";
 import { Outlet } from "react-router-dom";
-import { UserProvider } from "../../context/UserContext";
+import { useNavigate } from "react-router-dom";
+import { useEffect, useContext } from "react";
+import { Context } from "../../context/UserContext";
 
-export const Layout = () => {
-  
+const Layout = () => {
+  const navigate = useNavigate()
+  const {authenticated} = useContext(Context)
+
+  useEffect(() => {
+    if(!authenticated && window.location.pathname !== '/') {
+      navigate('/', {replace: true})
+    }
+  }, [authenticated, navigate])
+
+
   return (
-    <UserProvider>
-      <ContainerMaster>
-        <Header />
-        <Outlet />
-        <Footer />
-      </ContainerMaster>
-    </UserProvider>
+    <ContainerMaster>
+      <Header />
+      <Outlet />
+      <Footer />
+    </ContainerMaster>
   );
 };
+
+export default Layout

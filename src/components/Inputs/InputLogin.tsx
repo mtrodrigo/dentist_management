@@ -7,7 +7,7 @@ interface InputLoginProps {
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void,
 }
 
-export const InputLogin = ({label ,type, name, onChange }: InputLoginProps) => {
+export const InputLogin = ({label ,type, name, onChange, ...props }: InputLoginProps) => {
     return (
         <TextField
             hiddenLabel
@@ -19,6 +19,7 @@ export const InputLogin = ({label ,type, name, onChange }: InputLoginProps) => {
             variant="outlined"
             name={name}
             onChange={onChange}
+            {...props}
             defaultValue=""
             inputProps={{ style: { color: 'white' } }}
             sx={{

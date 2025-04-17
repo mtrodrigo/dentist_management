@@ -4,6 +4,7 @@ import { LoginContainer } from "../../components/Containers/LoginContainer";
 import Logo from "../../assets/logo.png";
 import { Context } from "../../context/UserContext";
 import { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface UserProps {
   email: string;
@@ -16,6 +17,7 @@ export const Login = () => {
     password: "",
   });
   const { login, authenticated, logout } = useContext(Context);
+  const navigate = useNavigate();
 
   if (authenticated) {
     logout();
@@ -28,6 +30,10 @@ export const Login = () => {
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     login(user);
+  };
+
+  const handleRegister = () => {
+    navigate("/user/register");
   };
 
   return (
@@ -55,6 +61,14 @@ export const Login = () => {
             type="submit"
           >
             Entrar
+          </Button>
+          <Button
+            sx={{ marginTop: 1 }}
+            variant="outlined"
+            color="primary"
+            onClick={handleRegister}
+          >
+            Criar login
           </Button>
         </form>
       </LoginContainer>
