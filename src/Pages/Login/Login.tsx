@@ -5,6 +5,7 @@ import Logo from "../../assets/logo.png";
 import { Context } from "../../context/UserContext";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 interface UserProps {
   email: string;
@@ -16,6 +17,7 @@ export const Login = () => {
     email: "",
     password: "",
   });
+  const [isLoading, setIsLoading] = useState<boolean>(false)
   const { login, authenticated, logout } = useContext(Context);
   const navigate = useNavigate();
 
@@ -27,9 +29,14 @@ export const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    login(user);
+    setIsLoading(true);
+    try {
+      await login(user);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleRegister = () => {
@@ -54,14 +61,25 @@ export const Login = () => {
             name="password"
             onChange={handleChange}
           />
-          <Button
-            sx={{ marginTop: 2 }}
-            variant="outlined"
-            color="primary"
-            type="submit"
-          >
-            Entrar
-          </Button>
+          {isLoading ? (
+            <Button
+              sx={{ marginTop: 1 }}
+              variant="outlined"
+              color="primary"
+              disabled
+            >
+              <CircularProgress size={24} />
+            </Button>
+          ) : (
+            <Button
+              sx={{ marginTop: 1 }}
+              variant="outlined"
+              color="primary"
+              type="submit"
+            >
+              Entrar
+            </Button>
+          )}
           <Button
             sx={{ marginTop: 1 }}
             variant="outlined"

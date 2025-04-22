@@ -18,6 +18,7 @@ export default function Details() {
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
+  const [isLoading, setIsLoading] = useState(false);
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -50,6 +51,8 @@ export default function Details() {
 
     if (!patient) return;
 
+    setIsLoading(true);
+
     let msgText = "Paciente editado com sucesso";
 
     try {
@@ -66,11 +69,15 @@ export default function Details() {
       console.log("Erro: ", error);
       msgText = "Erro ao fazer a edição";
       toast.error(msgText);
+      setIsLoading(false);
+    }finally {
+      setIsLoading(false);
     }
   };
 
   const removePatient = async () => {
     let msgText = "Paciente removido com sucesso";
+    setIsLoading(true);
 
     try {
       await api.delete(`/patients/mypatients/${id}`, {
@@ -84,6 +91,9 @@ export default function Details() {
       console.error("Erro: ", error);
       msgText = "Erro ao remover paciente";
       toast.error(msgText);
+      setIsLoading(false);
+    } finally { 
+      setIsLoading(false);
     }
   };
 
@@ -182,21 +192,44 @@ export default function Details() {
           onChange={(e) => handleChange(e)}
         />
         <div className="flex gap-2 items-center justify-between w-full mt-5">
-          <Button
-            variant="outlined"
-            type="submit"
-            startIcon={<EditOutlinedIcon />}
-          >
-            Editar
-          </Button>
-          <Button
-            variant="outlined"
-            startIcon={<DeleteOutlineOutlinedIcon />}
-            color="error"
-            onClick={removePatient}
-          >
-            Apagar
-          </Button>
+          {isLoading ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled
+              startIcon={<CircularProgress size={24} />}
+            >
+              Editando
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              startIcon={<EditOutlinedIcon />}
+              color="primary"
+              type="submit"
+            >
+              Editar
+            </Button>
+          )}
+          {isLoading ? (
+            <Button
+              variant="outlined"
+              color="primary"
+              disabled
+              startIcon={<CircularProgress size={24} />}
+            >
+              Removendo
+            </Button>
+          ) : (
+            <Button
+              variant="outlined"
+              startIcon={<DeleteOutlineOutlinedIcon />}
+              color="error"
+              onClick={removePatient}
+            >
+              Remover
+            </Button>
+          )}
         </div>
       </form>
     </PatientContainer>

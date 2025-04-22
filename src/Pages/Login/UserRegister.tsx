@@ -1,9 +1,9 @@
 import { InputLogin } from "../../components/Inputs/InputLogin";
-import { Button } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { LoginContainer } from "../../components/Containers/LoginContainer";
 import Logo from "../../assets/logo.png";
 import { Context } from "../../context/UserContext";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -20,17 +20,17 @@ interface UserRegisterProps {
 
 export const UserRegister = () => {
   const { register, handleSubmit } = useForm<UserRegisterProps>();
+  const [ isLoading, setIsLoading ] = useState(false);
   const { login } = useContext(Context);
   const navigate = useNavigate();
 
   const handleRegister = async (data: UserRegisterProps) => {
-    console.log(data);
     
     if (data.password !== data.confirmpassword) {
       toast.error("As senhas não coincidem!");
       return;
     }
-
+    setIsLoading(true);
     try {
       await api.post(
         "/users/register",
@@ -61,6 +61,9 @@ export const UserRegister = () => {
       }
 
       toast.error(errorMessage);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -85,14 +88,25 @@ export const UserRegister = () => {
             type="password"
             {...register("confirmpassword")}
           />
-          <Button
-            sx={{ marginTop: 2 }}
-            variant="outlined"
-            color="primary"
-            type="submit"
-          >
-            Cadastrar
-          </Button>
+          {isLoading ? (
+            <Button
+              sx={{ marginTop: 1 }}
+              variant="outlined"
+              color="primary"
+              disabled
+            >
+              <CircularProgress size={24} />
+            </Button>
+          ) : (
+            <Button
+              sx={{ marginTop: 1 }}
+              variant="outlined"
+              color="primary"
+              type="submit"
+            >
+              Criar login
+            </Button>
+          )}
           <Button
             sx={{ marginTop: 1 }}
             variant="outlined"

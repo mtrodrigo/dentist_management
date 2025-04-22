@@ -15,11 +15,13 @@ export default function Register() {
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm<PatientProps>();
 
   const updatePatient = async (data: Record<string, any>) => {
     let msgText = "Paciente cadastrado com sucesso";
+    setIsLoading(true);
 
     try {
       await api.post("/patients/create", data, {
@@ -34,6 +36,9 @@ export default function Register() {
       console.error("Erro: ", error);
       msgText = "Erro ao cadastrar paciente, tente novamente";
       toast.error(msgText);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -76,8 +81,14 @@ export default function Register() {
           {...register("medicalHistory")}
         />
         <div className="flex gap-2 items-center justify-center w-full mt-5">
-          <Button variant="outlined" type="submit" startIcon={<HowToRegIcon />}>
-            Cadastrar
+          <Button
+            variant="outlined"
+            color="primary"
+            type="submit"
+            disabled={isLoading}
+            startIcon={<HowToRegIcon />}
+          >
+            {isLoading ? "Cadastrando..." : "Cadastrar"}
           </Button>
         </div>
       </form>
