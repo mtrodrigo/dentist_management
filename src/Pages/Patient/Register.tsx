@@ -7,11 +7,26 @@ import InputDetails from "../../components/Inputs/InputDetails";
 import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspaceOutlined";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
 import TextArea from "../../components/Inputs/TextArea";
-import { PatientProps } from "../Home/Home";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 type CheckCepEvent = React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>;
+
+const schema = z.object({
+  name: z.string().nonempty("O campo nome é obrigatório"),
+  email: z.string().email("Formato de e-mail inválido").nonempty("O campo e-mail é obrigatório"),
+  phone: z.string().nonempty("O campo telefone é obrigatório"),
+  cpf: z.string().nonempty("O campo CPF é obrigatório"),
+  address: z.string().nonempty("O campo endereço é obrigatório"),
+  city: z.string().nonempty("O campo cidade é obrigatório"),
+  state: z.string().nonempty("O campo estado é obrigatório"),
+  birthDate: z.string().nonempty("O campo data de nascimento é obrigatório"),
+  zipCode: z.string().nonempty("O campo CEP é obrigatório"),
+  medicalHistory: z.string().nonempty(),
+})
+ type FormData = z.infer<typeof schema>;
 
 export default function Register() {
   const [token] = useState(
@@ -19,9 +34,9 @@ export default function Register() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue } = useForm<PatientProps>();
+  const { register, handleSubmit, setValue, formState: {errors}} = useForm<FormData>({resolver: zodResolver(schema), mode: "onChange"});
 
-  const updatePatient = async (data: Record<string, any>) => {
+  const updatePatient = async (data: FormData) => {
     let msgText = "Paciente cadastrado com sucesso";
     setIsLoading(true);
 
@@ -53,6 +68,8 @@ export default function Register() {
           if (!response.ok) {
             throw new Error("Erro ao buscar CEP");
           }
+          console.log("response", response);
+          
           return response.json();
         })
         .then((data) => {
@@ -60,9 +77,9 @@ export default function Register() {
             toast.error("CEP não encontrado");
             return;
           }
-          setValue("address", data.address);
-          setValue("city", data.city);
-          setValue("state", data.state);
+          setValue("address", data.logradouro);
+          setValue("city", data.localidade);
+          setValue("state", data.uf);
         })
         .catch((error) => {
           console.error("Erro: ", error);
@@ -71,9 +88,7 @@ export default function Register() {
     }
   };
 
-  const handleGoHome = () => {
-    navigate('/home')
-  }
+
 
   return (
     <PatientContainer>
@@ -84,30 +99,32 @@ export default function Register() {
         <Button
           variant="outlined"
           startIcon={<KeyboardBackspaceOutlinedIcon />}
-          onClick={handleGoHome}
+          onClick={() => navigate("/home")}
         >
           Voltar
         </Button>
-        <InputDetails type="text" text="Nome:" {...register("name")} />
-        <InputDetails type="text" text="E-mail:" {...register("email")} />
-        <InputDetails type="text" text="Telefone:" {...register("phone")} />
-        <InputDetails type="text" text="CPF:" {...register("cpf")} />
-        <InputDetails type="text" text="Endereço:" {...register("address")} />
-        <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
-          <InputDetails type="text" text="Cidade:" {...register("city")} />
-          <InputDetails type="text" text="Estado:" {...register("state")} />
-        </div>
+        <InputDetails type="text" text="Nome:" {...register("name")} error={errors.name?.message}/>
+        <InputDetails type="text" text="E-mail:" {...register("email")} error={errors.email?.message} />
+        <InputDetails type="text" text="Telefone:" {...register("phone")} error={errors.phone?.message} />
+        <InputDetails type="text" text="CPF:" {...register("cpf")} error={errors.cpf?.message} />
         <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
           <InputDetails
             type="text"
             text="Data Nascimento:"
             {...register("birthDate")}
+            error={errors.birthDate?.message}
           />
-          <InputDetails type="text" text="CEP:" {...register("zipCode")} onBlur={checkCep}/>
+          <InputDetails type="text" text="CEP:" {...register("zipCode")} onBlur={checkCep} error={errors.zipCode?.message}/>
+        </div>
+        <InputDetails type="text" text="Endereço:" {...register("address")} error={errors.address?.message} />
+        <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
+          <InputDetails type="text" text="Cidade:" {...register("city")} error={errors.city?.message} />
+          <InputDetails type="text" text="Estado:" {...register("state")} error={errors.state?.message} />
         </div>
         <TextArea
           text="Histórico do Paciente:"
           {...register("medicalHistory")}
+          error={errors.email?.message}
         />
         <div className="flex gap-2 items-center justify-center w-full mt-5">
           <Button

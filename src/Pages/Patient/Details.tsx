@@ -53,6 +53,7 @@ export default function Details() {
       <p className="text-white">CPF: {patient.cpf}</p>
       <p className="text-white">Telefone: {patient.phone}</p>
       <p className="text-white">Email: {patient.email}</p>
+      <p className="text-white">Data de Nascimento: {patient.birthDate}</p>
       <p className="text-white">Endereço: {patient.address}</p>
       <p className="text-white">
         {" "}

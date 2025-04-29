@@ -65,7 +65,10 @@ export const Home = () => {
   ) : (
     <main className="px-3">
       {patients?.length === 0 ? (
-        <div>
+        <div className="flex flex-col items-center justify-center gap-3">
+          <h2 className="text-center text-2xl text-blue-500">
+            Você ainda não possui pacientes cadastrados.
+          </h2>
           <Button
             variant="outlined"
             startIcon={<HowToRegIcon />}

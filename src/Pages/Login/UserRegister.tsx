@@ -10,21 +10,32 @@ import toast from "react-hot-toast";
 import api from "../../utils/api";
 import { ContainerMaster } from "../../components/Containers/ContainerMaster";
 import { Footer } from "../../components/Footer/Footer";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-interface UserRegisterProps {
-  name: string;
-  email: string;
-  password: string;
-  confirmpassword: string;
-}
+const schema = z.object({
+  name: z.string().nonempty("O campo nome é obrigatório"),
+  email: z
+    .string()
+    .email("Formato de e-mail inválido")
+    .nonempty("O campo e-mail é obrigatório"),
+  password: z.string().nonempty("O campo senha é obrigatório"),
+  confirmpassword: z.string().nonempty("O campo confirmar senha é obrigatório"),
+});
+
+type FormData = z.infer<typeof schema>;
 
 export const UserRegister = () => {
-  const { register, handleSubmit } = useForm<UserRegisterProps>();
   const [ isLoading, setIsLoading ] = useState(false);
   const { login } = useContext(Context);
   const navigate = useNavigate();
+  const {
+      register,
+      handleSubmit,
+      formState: { errors },
+    } = useForm({ resolver: zodResolver(schema), mode: "onChange" });
 
-  const handleRegister = async (data: UserRegisterProps) => {
+  const handleRegister = async (data: FormData) => {
     
     if (data.password !== data.confirmpassword) {
       toast.error("As senhas não coincidem!");
@@ -67,9 +78,6 @@ export const UserRegister = () => {
     }
   };
 
-  const handleLogin = () => {
-    navigate("/");
-  };
 
   return (
     <ContainerMaster>
@@ -80,13 +88,33 @@ export const UserRegister = () => {
           onSubmit={handleSubmit(handleRegister)}
           className="flex flex-col gap-5"
         >
-          <InputLogin label="Nome" type="text" {...register("name")} />
-          <InputLogin label="E-mail" type="email" {...register("email")} />
-          <InputLogin label="Senha" type="password" {...register("password")} />
           <InputLogin
-            label="Confirme a Senha"
+            label="Nome"
+            type="text"
+            name="name"
+            error={errors.name?.message}
+            register={register}
+          />
+          <InputLogin
+            label="E-mail"
+            type="email"
+            name="email"
+            error={errors.email?.message}
+            register={register}
+          />
+          <InputLogin
+            label="Senha"
             type="password"
-            {...register("confirmpassword")}
+            name="password"
+            error={errors.password?.message}
+            register={register}
+          />
+          <InputLogin
+            label="Confirmar senha"
+            type="password"
+            name="confirmpassword"
+            error={errors.confirmpassword?.message}
+            register={register}
           />
           {isLoading ? (
             <Button
@@ -111,7 +139,7 @@ export const UserRegister = () => {
             sx={{ marginTop: 1 }}
             variant="outlined"
             color="primary"
-            onClick={handleLogin}
+            onClick={() => navigate("/")}
           >
             Já tem login
           </Button>
