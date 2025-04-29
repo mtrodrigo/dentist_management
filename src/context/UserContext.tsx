@@ -5,6 +5,7 @@ interface UserContextProps {
     authenticated: boolean;
     login: (user: { email: string; password: string }) => Promise<void>;
     logout: () => Promise<void>;
+    loading: boolean;
 }
 export interface ChildrenProps {
     children: React.ReactNode;
@@ -14,10 +15,10 @@ export interface ChildrenProps {
 const Context = createContext({} as UserContextProps)
 
 const UserProvider: React.FC<ChildrenProps> = ({ children }: ChildrenProps) => {
-    const { authenticated, login, logout } = useAuth() as UserContextProps;
+    const { authenticated, login, logout, loading } = useAuth() as UserContextProps;
 
     return (
-        <Context.Provider value={{ authenticated, login, logout }}>
+        <Context.Provider value={{ authenticated, login, logout, loading }}>
             {children}
         </Context.Provider>
     );

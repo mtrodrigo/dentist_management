@@ -4,6 +4,7 @@ interface InputProps {
   value?: string;
   type: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
 export default function InputDetails({
@@ -12,6 +13,7 @@ export default function InputDetails({
   value,
   type,
   onChange,
+  onBlur,
   ...props
 }: InputProps) {
   return (
@@ -25,6 +27,7 @@ export default function InputDetails({
         value={value}
         name={name}
         onChange={onChange}
+        onBlur={onBlur}
         {...props}
       />
     </div>

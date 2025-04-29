@@ -11,7 +11,7 @@ interface AuthUserProps {
 
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState<boolean>(false);
-
+  const [loading, setLoading] = useState<boolean>(true); // Estado de carregamento
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -20,11 +20,14 @@ export default function useAuth() {
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
       setAuthenticated(true);
+    } else {
+      setAuthenticated(false);
     }
+    setLoading(false); // Finaliza o carregamento
   }, []);
+
   const authUser = async (data: AuthUserProps) => {
     setAuthenticated(true);
-
     localStorage.setItem(
       "@dentist-management-token",
       JSON.stringify(data.token)
@@ -35,7 +38,6 @@ export default function useAuth() {
     let msgText = "Login realizado com sucesso";
 
     try {
-      
       const data = await api.post("/users/login", user).then((response) => {
         return response.data;
       });
@@ -57,17 +59,15 @@ export default function useAuth() {
         console.error("Error:", error);
       }
     }
-  }
+  };
+
   const logout = () => {
-    const msgText = "Logout realizado com sucesso";
-    
     localStorage.removeItem("@dentist-management-token");
     delete api.defaults.headers.Authorization;
-    
+
     setAuthenticated(false);
-    
-    toast.success(msgText);
-    navigate('/', {replace: true})
+    navigate("/", { replace: true });
   };
-  return { authenticated, login, logout };
+
+  return { authenticated, loading, login, logout };
 }

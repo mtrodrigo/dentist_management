@@ -11,13 +11,15 @@ import { PatientProps } from "../Home/Home";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
 
+type CheckCepEvent = React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>;
+
 export default function Register() {
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit } = useForm<PatientProps>();
+  const { register, handleSubmit, setValue } = useForm<PatientProps>();
 
   const updatePatient = async (data: Record<string, any>) => {
     let msgText = "Paciente cadastrado com sucesso";
@@ -39,6 +41,33 @@ export default function Register() {
       setIsLoading(false);
     } finally {
       setIsLoading(false);
+    }
+  };
+
+
+  const checkCep = (e: CheckCepEvent): void => {
+    if (e.target instanceof HTMLInputElement) {
+      const cep: string = e.target.value.replace(/\D/g, "");
+      fetch(`https://viacep.com.br/ws/${cep}/json/`)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Erro ao buscar CEP");
+          }
+          return response.json();
+        })
+        .then((data) => {
+          if (data.erro) {
+            toast.error("CEP não encontrado");
+            return;
+          }
+          setValue("address", data.address);
+          setValue("city", data.city);
+          setValue("state", data.state);
+        })
+        .catch((error) => {
+          console.error("Erro: ", error);
+          toast.error("Erro ao buscar CEP");
+        });
     }
   };
 
@@ -69,12 +98,12 @@ export default function Register() {
           <InputDetails type="text" text="Estado:" {...register("state")} />
         </div>
         <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
-          <InputDetails type="text" text="CEP:" {...register("zipCode")} />
           <InputDetails
             type="text"
             text="Data Nascimento:"
             {...register("birthDate")}
           />
+          <InputDetails type="text" text="CEP:" {...register("zipCode")} onBlur={checkCep}/>
         </div>
         <TextArea
           text="Histórico do Paciente:"

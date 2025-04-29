@@ -6,34 +6,38 @@ import { Context } from "../../context/UserContext";
 import { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
-interface UserProps {
-  email: string;
-  password: string;
-}
+const schema = z.object({
+  email: z
+    .string()
+    .email("Formato de e-mail inválido")
+    .nonempty("O campo e-mail é obrigatório"),
+  password: z.string().nonempty("O campo senha é obrigatório"),
+});
+
+type FormData = z.infer<typeof schema>;
 
 export const Login = () => {
-  const [user, setUser] = useState<UserProps>({
-    email: "",
-    password: "",
-  });
-  const [isLoading, setIsLoading] = useState<boolean>(false)
-  const { login, authenticated, logout } = useContext(Context);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { login, authenticated } = useContext(Context);
   const navigate = useNavigate();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({ resolver: zodResolver(schema), mode: "onChange" });
 
   if (authenticated) {
-    logout();
+    navigate("/home");
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setUser({ ...user, [e.target.name]: e.target.value });
-  };
-
-  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleLogin = async (data: FormData) => {
     setIsLoading(true);
     try {
-      await login(user);
+      await login(data);
     } finally {
       setIsLoading(false);
     }
@@ -48,18 +52,20 @@ export const Login = () => {
       <img className="max-w-60 md:max-w-md" src={Logo} alt="Logo" />
       <LoginContainer>
         <h1 className="text-2xl text-center text-blue-500">Faça o login</h1>
-        <form onSubmit={handleLogin} className="flex flex-col gap-5">
+        <form onSubmit={handleSubmit(handleLogin)} className="flex flex-col gap-5">
           <InputLogin
             label="Usuário"
             type="email"
             name="email"
-            onChange={handleChange}
+            error={errors.email?.message}
+            register={register}
           />
           <InputLogin
             label="Senha"
             type="password"
             name="password"
-            onChange={handleChange}
+            error={errors.password?.message}
+            register={register}
           />
           {isLoading ? (
             <Button
@@ -86,7 +92,7 @@ export const Login = () => {
             color="primary"
             onClick={handleRegister}
           >
-            Criar login
+            Criar usário
           </Button>
         </form>
       </LoginContainer>

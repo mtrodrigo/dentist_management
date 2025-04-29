@@ -9,7 +9,7 @@ import Button from "@mui/material/Button";
 import { useEffect, useState } from "react";
 import api from "../../utils/api";
 import CircularProgress from "@mui/material/CircularProgress";
-import HowToRegIcon from '@mui/icons-material/HowToReg';
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { useNavigate } from "react-router-dom";
 
 export interface PatientProps {
@@ -32,7 +32,7 @@ export const Home = () => {
   const [token] = useState(
     localStorage.getItem("@dentist-management-token") || ""
   );
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   useEffect(() => {
     api
@@ -51,12 +51,12 @@ export const Home = () => {
   }, []);
 
   const handleRegister = () => {
-    navigate('/patient/register')
-  }
+    navigate("/patient/register");
+  };
 
   const handleDetails = (id: string) => {
-    navigate(`/patient/${id}`)
-  }
+    navigate(`/patient/${id}`);
+  };
 
   return isLoading ? (
     <>
@@ -64,46 +64,65 @@ export const Home = () => {
     </>
   ) : (
     <main className="px-3">
-      <div>
-        <Button variant="outlined" startIcon={<HowToRegIcon />} onClick={handleRegister}>
-          Cadastrar
-        </Button>
-      </div>
-      <TableContainer component={Paper}>
-        <Table
-          sx={{ maxWidth: 650, color: "transparent" }}
-          size="small"
-          aria-label=""
-        >
-          <TableHead>
-            <TableRow>
-              <TableCell>Nome</TableCell>
-              <TableCell align="center">CPF</TableCell>
-              <TableCell align="center">Cidade</TableCell>
-              <TableCell align="center"></TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {patients?.map((patient) => (
-              <TableRow
-                key={patient.cpf}
-                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-              >
-                <TableCell component="th" scope="row">
-                  {patient.name}
-                </TableCell>
-                <TableCell align="right">{patient.cpf}</TableCell>
-                <TableCell align="center">{patient.city}</TableCell>
-                <TableCell align="center">
-                  <Button size="small" onClick={() => handleDetails(patient._id) }>
-                    Detalhes
-                  </Button>
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      {patients?.length === 0 ? (
+        <div>
+          <Button
+            variant="outlined"
+            startIcon={<HowToRegIcon />}
+            onClick={handleRegister}
+          >
+            Cadastrar
+          </Button>
+        </div>
+      ) : (
+        <>
+          <Button
+            variant="outlined"
+            startIcon={<HowToRegIcon />}
+            onClick={handleRegister}
+          >
+            Cadastrar
+          </Button>
+          <TableContainer component={Paper}>
+            <Table
+              sx={{ maxWidth: 650, color: "transparent" }}
+              size="small"
+              aria-label=""
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell>Nome</TableCell>
+                  <TableCell align="center">CPF</TableCell>
+                  <TableCell align="center">Cidade</TableCell>
+                  <TableCell align="center"></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {patients?.map((patient) => (
+                  <TableRow
+                    key={patient.cpf}
+                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {patient.name}
+                    </TableCell>
+                    <TableCell align="right">{patient.cpf}</TableCell>
+                    <TableCell align="center">{patient.city}</TableCell>
+                    <TableCell align="center">
+                      <Button
+                        size="small"
+                        onClick={() => handleDetails(patient._id)}
+                      >
+                        Detalhes
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </>
+      )}
     </main>
   );
 };

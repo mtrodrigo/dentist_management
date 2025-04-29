@@ -6,6 +6,7 @@ import Layout from "./components/Layout/Layout";
 import { UserRegister } from "./Pages/Login/UserRegister";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { UserProvider } from "./context/UserContext";
+import Edit from "./Pages/Patient/Edit";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/home" element={<Home />} />
             <Route path="/patient/:id" element={<Details />} />
             <Route path="/patient/register" element={<Register />} />
+            <Route path="/patient/edit/:id" element={<Edit />} />
           </Route>
         </Routes>
       </UserProvider>

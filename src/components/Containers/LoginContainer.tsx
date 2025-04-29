@@ -7,7 +7,7 @@ export function LoginContainer({ children }: ChildrenProps) {
       sx={{
         display: "flex",
         flexDirection: "column",
-        gap: 4,
+        gap: 2,
         alignItems: "center",
         justifyContent: "center",
         p: 2,
