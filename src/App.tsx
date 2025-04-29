@@ -12,7 +12,7 @@ function App() {
     <Router>
       <UserProvider>
         <Routes>
-            <Route path="/user/register" element={<UserRegister />} />
+          <Route path="/user/register" element={<UserRegister />} />
           <Route path="/" element={<Layout />}>
             <Route index element={<Login />} />
             <Route path="/home" element={<Home />} />
