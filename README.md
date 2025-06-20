@@ -14,7 +14,7 @@ Siga os passos abaixo para configurar e executar o frontend do projeto localment
 
 1. **Clone o repositório**:
   ```bash
-  git clone https://github.com/seu-usuario/dentist-management.git
+  git clone https://github.com/mtrodrigo/dentist_management.git
   cd dentist-management
   ```
 
