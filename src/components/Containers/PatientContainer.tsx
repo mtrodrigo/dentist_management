@@ -10,7 +10,7 @@ export function PatientContainer({ children }: ChildrenProps) {
         border: "1px solid #BDBDBD",
         borderRadius: 2,
         boxShadow: 3,
-        maxWidth: 500,
+        maxWidth: 800,
         width: "100%",
         bgcolor: "#424242",
       }}
