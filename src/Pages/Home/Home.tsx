@@ -24,6 +24,7 @@ export interface PatientProps {
   state: string;
   zipCode: string;
   medicalHistory: string;
+  images: string[];
 }
 
 export const Home = () => {
