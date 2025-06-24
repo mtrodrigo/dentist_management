@@ -6,6 +6,8 @@ import Button from "@mui/material/Button";
 import InputDetails from "../../components/Inputs/InputDetails";
 import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspaceOutlined";
 import HowToRegIcon from "@mui/icons-material/HowToReg";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PhotoCameraIcon from "@mui/icons-material/PhotoCamera";
 import TextArea from "../../components/Inputs/TextArea";
 import api from "../../utils/api";
 import toast from "react-hot-toast";
@@ -13,6 +15,12 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 type CheckCepEvent = React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>;
+
+interface ImagePreview {
+  file: File;
+  url: string;
+  id: string;
+}
 
 const schema = z.object({
   name: z.string().nonempty("O campo nome é obrigatório"),
@@ -36,7 +44,9 @@ export default function Register() {
     localStorage.getItem("@dentist-management-token") || ""
   );
   const [isLoading, setIsLoading] = useState(false);
+  const [images, setImages] = useState<ImagePreview[]>([]);
   const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
@@ -44,14 +54,60 @@ export default function Register() {
     formState: { errors },
   } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange" });
 
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (!files) return;
+
+    Array.from(files).forEach((file) => {
+      if (!file.type.startsWith("image/")) {
+        toast.error("Por favor, selecione apenas arquivos de imagem");
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        toast.error("Imagem muito grande. Máximo 5MB");
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const newImage: ImagePreview = {
+          file,
+          url: e.target?.result as string,
+          id: Math.random().toString(36).substr(2, 9),
+        };
+
+        setImages((prev) => [...prev, newImage]);
+      };
+      reader.readAsDataURL(file);
+    });
+
+    event.target.value = "";
+  };
+
+  const removeImage = (imageId: string) => {
+    setImages((prev) => prev.filter((img) => img.id !== imageId));
+  };
+
   const registerPatient = async (data: FormData) => {
     let msgText = "Paciente cadastrado com sucesso";
     setIsLoading(true);
 
     try {
-      await api.post("/patients/create", data, {
+      const formData = new FormData();
+
+      Object.entries(data).forEach(([key, value]) => {
+        formData.append(key, value);
+      });
+
+      images.forEach((image) => {
+        formData.append(`images`, image.file);
+      });
+
+      await api.post("/patients/create", formData, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
+          "Content-Type": "multipart/form-data",
         },
       });
 
@@ -61,7 +117,6 @@ export default function Register() {
       console.error("Erro: ", error);
       msgText = "Erro ao cadastrar paciente, tente novamente";
       toast.error(msgText);
-      setIsLoading(false);
     } finally {
       setIsLoading(false);
     }
@@ -75,8 +130,6 @@ export default function Register() {
           if (!response.ok) {
             throw new Error("Erro ao buscar CEP");
           }
-          console.log("response", response);
-
           return response.json();
         })
         .then((data) => {
@@ -108,9 +161,64 @@ export default function Register() {
         >
           Voltar
         </Button>
-        <div className="my-3">
-          <input type="file" />
+
+        <div className="my-3 w-full">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center gap-2">
+              <input
+                type="file"
+                id="image-upload"
+                multiple
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              <Button
+                variant="outlined"
+                component="label"
+                htmlFor="image-upload"
+                startIcon={<PhotoCameraIcon />}
+                disabled={isLoading}
+              >
+                Adicionar Imagens
+              </Button>
+              <span className="text-sm text-gray-500">
+                {images.length} imagem(ns) selecionada(s)
+              </span>
+            </div>
+
+            {images.length > 0 && (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                {images.map((image) => (
+                  <div
+                    key={image.id}
+                    className="relative group border rounded-lg overflow-hidden"
+                  >
+                    <img
+                      src={image.url}
+                      alt="Preview"
+                      className="w-full h-24 object-cover"
+                    />
+                    <Button
+                      variant="contained"
+                      color="error"
+                      size="small"
+                      onClick={() => removeImage(image.id)}
+                      className="absolute top-1 right-1 min-w-0 w-8 h-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      disabled={isLoading}
+                    >
+                      <DeleteIcon fontSize="small" />
+                    </Button>
+                    <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate">
+                      {image.file.name}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
+
         <InputDetails
           type="text"
           text="Nome:"
@@ -173,7 +281,7 @@ export default function Register() {
         <TextArea
           text="Histórico do Paciente:"
           {...register("medicalHistory")}
-          error={errors.email?.message}
+          error={errors.medicalHistory?.message}
         />
         <div className="flex gap-2 items-center justify-center w-full mt-5">
           <Button
