@@ -1,6 +1,6 @@
 import axios from 'axios'
 
-const baseURL = process.env.URL_API;
+const baseURL = process.env.VITE_URL_API;
 
 export default axios.create({
     baseURL,
