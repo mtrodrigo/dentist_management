@@ -197,17 +197,17 @@ export default function Register() {
                     <img
                       src={image.url}
                       alt="Preview"
-                      className="w-full h-24 object-cover"
+                      className="w-full h-24 object-cover relative"
                     />
                     <Button
                       variant="contained"
                       color="error"
-                      size="small"
+                      size="medium"
                       onClick={() => removeImage(image.id)}
-                      className="absolute top-1 right-1 min-w-0 w-8 h-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity"
+                      className="absolute top-1 right-1 min-w-0 w-8 h-8 p-0 opacity-0 group-hover:opacity-100 transition-opacity z-10"
                       disabled={isLoading}
                     >
-                      <DeleteIcon fontSize="small" />
+                      <DeleteIcon fontSize="large" />
                     </Button>
                     <div className="absolute bottom-0 left-0 right-0 bg-black bg-opacity-50 text-white text-xs p-1 truncate">
                       {image.file.name}
