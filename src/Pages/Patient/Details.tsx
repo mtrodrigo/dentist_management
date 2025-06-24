@@ -7,8 +7,8 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspaceOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, IconButton, Modal, useMediaQuery, useTheme } from "@mui/material";
-import CloseIcon from '@mui/icons-material/Close';
+import { Box, Chip, Grid, IconButton, Modal, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 export default function Details() {
   const [patient, setPatient] = useState<PatientProps | null>(null);
@@ -64,22 +64,55 @@ export default function Details() {
       >
         Voltar
       </Button>
-      {patient.images && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto justify-items-center my-5">
-          {patient.images.map((image, index) => (
-            <div 
-              key={index} 
-              className="cursor-pointer" 
-              onClick={() => handleImageClick(image)}
-            >
-              <img 
-                className="max-w-72 rounded-md hover:opacity-90 transition-opacity" 
-                src={image} 
-                alt={`Imagem ${index + 1}`} 
-              />
-            </div>
-          ))}
-        </div>
+      {patient.images && patient.images.length > 0 && (
+        <Box sx={{ width: "100%", my: 3 }}>
+          <Typography variant="h6" gutterBottom color="white">
+            Imagens:
+          </Typography>
+
+          <Grid container spacing={2}>
+            {patient.images.map((image, index) => (
+              <Grid item xs={12} sm={6} md={4} key={index}>
+                <Paper
+                  elevation={3}
+                  sx={{
+                    p: 1,
+                    position: "relative",
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    "&:hover": {
+                      boxShadow: 4,
+                      cursor: "pointer",
+                    },
+                  }}
+                  onClick={() => handleImageClick(image)}
+                >
+                  <Box
+                    component="img"
+                    src={image}
+                    alt={`Imagem ${index + 1}`}
+                    sx={{
+                      width: "100%",
+                      height: 200,
+                      objectFit: "contain",
+                      bgcolor: "grey.100",
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      alignItems: "center",
+                      mt: 1,
+                    }}
+                  >
+                  </Box>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
       )}
 
       <Modal
@@ -88,46 +121,46 @@ export default function Details() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box 
+        <Box
           sx={{
-            position: 'absolute',
-            top: isMobile ? 0 : '50%',
-            left: isMobile ? 0 : '50%',
+            position: "absolute",
+            top: isMobile ? 0 : "50%",
+            left: isMobile ? 0 : "50%",
             right: isMobile ? 0 : undefined,
             bottom: isMobile ? 0 : undefined,
-            transform: isMobile ? 'none' : 'translate(-50%, -50%)',
-            width: isMobile ? '100%' : 'auto',
-            height: isMobile ? '100%' : 'auto',
-            bgcolor: 'background.paper',
+            transform: isMobile ? "none" : "translate(-50%, -50%)",
+            width: isMobile ? "100%" : "auto",
+            height: isMobile ? "100%" : "auto",
+            bgcolor: "background.paper",
             boxShadow: 24,
             p: 2,
-            outline: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            outline: "none",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
           <IconButton
             aria-label="close"
             onClick={handleClose}
             sx={{
-              position: 'absolute',
+              position: "absolute",
               right: 8,
               top: 8,
-              color: (theme) => theme.palette.grey[500],
+              color: "#e7000b",
             }}
           >
             <CloseIcon />
           </IconButton>
-          
-          <img 
-            src={selectedImage} 
-            alt="Imagem ampliada" 
-            style={{ 
-              maxWidth: '100%', 
-              maxHeight: isMobile ? 'calc(100vh - 64px)' : '80vh',
-              objectFit: 'contain' 
+
+          <img
+            src={selectedImage}
+            alt="Imagem ampliada"
+            style={{
+              maxWidth: "100%",
+              maxHeight: isMobile ? "calc(100vh - 64px)" : "80vh",
+              objectFit: "contain",
             }}
           />
         </Box>
