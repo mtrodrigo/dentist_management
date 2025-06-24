@@ -105,7 +105,12 @@ export default function Details() {
     setRemovingImageId(imageUrl);
 
     try {
-      await api.delete(`/patients/${id}/images/delete`, {
+      console.log("Enviando requisição para deletar imagem:", {
+        patientId: id,
+        imageUrl,
+      });
+
+      const response = await api.delete(`/patients/${id}/images/delete`, {
         headers: {
           Authorization: `Bearer ${token ? JSON.parse(token) : ""}`,
           "Content-Type": "application/json",
@@ -115,19 +120,28 @@ export default function Details() {
         },
       });
 
-      setPatient((prev) =>
-        prev
-          ? {
-              ...prev,
-              images: prev.images?.filter((img) => img !== imageUrl),
-            }
-          : null
-      );
+      console.log("Resposta da API:", response.data);
+
+      setPatient((prev) => {
+        if (!prev) return null;
+
+        const updatedImages = prev.images?.filter((img) => {
+          if (typeof img === "string") {
+            return img !== imageUrl;
+          } else {
+            return img.url !== imageUrl;
+          }
+        });
+
+        return {
+          ...prev,
+          images: updatedImages,
+        };
+      });
 
       toast.success("Imagem removida com sucesso");
     } catch (error: any) {
       console.error("Erro completo:", error);
-      console.error("Resposta de erro:", error.response?.data);
 
       let errorMessage = "Erro ao remover imagem";
       if (error.response?.data?.message) {
