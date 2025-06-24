@@ -22,13 +22,17 @@ Siga os passos abaixo para configurar e executar o frontend do projeto localment
   ```bash
   npm install
   ```
-
-3. **Configuração do Backend**:
+3. **Configurações de ambiente**:
+  - Crie um arquivo .env na raiz do projeto com o seguinte conteúdo:
+  ```bash
+  URL_API=http://localhost:3000/
+  ```
+4. **Configuração do Backend**:
   - Certifique-se de que o backend está configurado e em execução. Você pode encontrar o repositório do backend [aqui](https://github.com/mtrodrigo/dentist_management_api.git).
 
-4. **Execute o projeto**:
+5. **Execute o projeto**:
   ```bash
-  npm start
+  npm run dev
   ```
 
   ## Contato
