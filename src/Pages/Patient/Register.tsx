@@ -16,7 +16,10 @@ type CheckCepEvent = React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>;
 
 const schema = z.object({
   name: z.string().nonempty("O campo nome é obrigatório"),
-  email: z.string().email("Formato de e-mail inválido").nonempty("O campo e-mail é obrigatório"),
+  email: z
+    .string()
+    .email("Formato de e-mail inválido")
+    .nonempty("O campo e-mail é obrigatório"),
   phone: z.string().nonempty("O campo telefone é obrigatório"),
   cpf: z.string().nonempty("O campo CPF é obrigatório"),
   address: z.string().nonempty("O campo endereço é obrigatório"),
@@ -25,8 +28,8 @@ const schema = z.object({
   birthDate: z.string().nonempty("O campo data de nascimento é obrigatório"),
   zipCode: z.string().nonempty("O campo CEP é obrigatório"),
   medicalHistory: z.string().nonempty(),
-})
- type FormData = z.infer<typeof schema>;
+});
+type FormData = z.infer<typeof schema>;
 
 export default function Register() {
   const [token] = useState(
@@ -34,9 +37,14 @@ export default function Register() {
   );
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const { register, handleSubmit, setValue, formState: {errors}} = useForm<FormData>({resolver: zodResolver(schema), mode: "onChange"});
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema), mode: "onChange" });
 
-  const updatePatient = async (data: FormData) => {
+  const registerPatient = async (data: FormData) => {
     let msgText = "Paciente cadastrado com sucesso";
     setIsLoading(true);
 
@@ -59,7 +67,6 @@ export default function Register() {
     }
   };
 
-
   const checkCep = (e: CheckCepEvent): void => {
     if (e.target instanceof HTMLInputElement) {
       const cep: string = e.target.value.replace(/\D/g, "");
@@ -69,7 +76,7 @@ export default function Register() {
             throw new Error("Erro ao buscar CEP");
           }
           console.log("response", response);
-          
+
           return response.json();
         })
         .then((data) => {
@@ -88,13 +95,11 @@ export default function Register() {
     }
   };
 
-
-
   return (
     <PatientContainer>
       <form
         className="flex flex-col gap-2 items-start justify-center mx-auto"
-        onSubmit={handleSubmit(updatePatient)}
+        onSubmit={handleSubmit(registerPatient)}
       >
         <Button
           variant="outlined"
@@ -103,10 +108,33 @@ export default function Register() {
         >
           Voltar
         </Button>
-        <InputDetails type="text" text="Nome:" {...register("name")} error={errors.name?.message}/>
-        <InputDetails type="text" text="E-mail:" {...register("email")} error={errors.email?.message} />
-        <InputDetails type="text" text="Telefone:" {...register("phone")} error={errors.phone?.message} />
-        <InputDetails type="text" text="CPF:" {...register("cpf")} error={errors.cpf?.message} />
+        <div className="my-3">
+          <input type="file" />
+        </div>
+        <InputDetails
+          type="text"
+          text="Nome:"
+          {...register("name")}
+          error={errors.name?.message}
+        />
+        <InputDetails
+          type="text"
+          text="E-mail:"
+          {...register("email")}
+          error={errors.email?.message}
+        />
+        <InputDetails
+          type="text"
+          text="Telefone:"
+          {...register("phone")}
+          error={errors.phone?.message}
+        />
+        <InputDetails
+          type="text"
+          text="CPF:"
+          {...register("cpf")}
+          error={errors.cpf?.message}
+        />
         <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
           <InputDetails
             type="text"
@@ -114,12 +142,33 @@ export default function Register() {
             {...register("birthDate")}
             error={errors.birthDate?.message}
           />
-          <InputDetails type="text" text="CEP:" {...register("zipCode")} onBlur={checkCep} error={errors.zipCode?.message}/>
+          <InputDetails
+            type="text"
+            text="CEP:"
+            {...register("zipCode")}
+            onBlur={checkCep}
+            error={errors.zipCode?.message}
+          />
         </div>
-        <InputDetails type="text" text="Endereço:" {...register("address")} error={errors.address?.message} />
+        <InputDetails
+          type="text"
+          text="Endereço:"
+          {...register("address")}
+          error={errors.address?.message}
+        />
         <div className="flex flex-col gap-3 w-10/10 sm:flex-row">
-          <InputDetails type="text" text="Cidade:" {...register("city")} error={errors.city?.message} />
-          <InputDetails type="text" text="Estado:" {...register("state")} error={errors.state?.message} />
+          <InputDetails
+            type="text"
+            text="Cidade:"
+            {...register("city")}
+            error={errors.city?.message}
+          />
+          <InputDetails
+            type="text"
+            text="Estado:"
+            {...register("state")}
+            error={errors.state?.message}
+          />
         </div>
         <TextArea
           text="Histórico do Paciente:"
