@@ -1,8 +1,10 @@
 import axios from 'axios'
 
+const baseURL = process.env.URL_API;
+
 export default axios.create({
-    baseURL: 'https://dentist-management-api.vercel.app',
+    baseURL,
     headers: {
         'Content-Type': 'application/json'
     }
-})
+});
