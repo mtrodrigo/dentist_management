@@ -7,7 +7,16 @@ import Button from "@mui/material/Button";
 import CircularProgress from "@mui/material/CircularProgress";
 import KeyboardBackspaceOutlinedIcon from "@mui/icons-material/KeyboardBackspaceOutlined";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
-import { Box, Chip, Grid, IconButton, Modal, Paper, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Grid,
+  IconButton,
+  Modal,
+  Paper,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 export default function Details() {
@@ -106,8 +115,7 @@ export default function Details() {
                       alignItems: "center",
                       mt: 1,
                     }}
-                  >
-                  </Box>
+                  ></Box>
                 </Paper>
               </Grid>
             ))}
